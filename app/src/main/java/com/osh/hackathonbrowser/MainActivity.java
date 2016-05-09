@@ -3,31 +3,28 @@ package com.osh.hackathonbrowser;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentHostInterface {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-
-    @BindView(R.id.events_viewpager)
-    ViewPager eventsViewpager;
-
-    @BindView(R.id.browse_events_tabs)
-    TabLayout tabs;
-
-    @BindView(R.id.browse_events_viewpager)
-    ViewPager browseEventsViewpager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +33,12 @@ public class MainActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
+        setSupportActionBar(toolbar);
+
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Replace with first fragment
+        replaceFragment(-1);
     }
 
     @Override
@@ -53,7 +55,25 @@ public class MainActivity extends AppCompatActivity
         switch(item.getItemId()){
         }
 
-        drawer.closeDrawer(GravityCompat.START);
+        closeDrawer();
         return true;
+    }
+
+    public void replaceFragment(int itemId){
+        //TODO: Actually implement replacement logic that works for more than just main page
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, ShowcaseFragment.newInstance());
+        getSupportActionBar().hide();
+        ft.commit();
+    }
+
+    @Override
+    public void closeDrawer() {
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
+    @Override
+    public void openDrawer() {
+        drawer.openDrawer(GravityCompat.START);
     }
 }

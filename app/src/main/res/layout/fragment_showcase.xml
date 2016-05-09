@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.osh.hackathonbrowser.MainActivity">
+
+    <!-- Top events ViewPager -->
+    <RelativeLayout
+        android:id="@+id/top_events_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/events_viewpager_height">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/events_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.osh.hackathonbrowser.DotsPagerIndicator
+            android:id="@+id/events_viewpager_indicator"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginBottom="4dp" />
+    </RelativeLayout>
+
+    <!-- Tabs for more granular browsing -->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/browse_events_tabs"
+        android:layout_below="@+id/top_events_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabBackground="@color/colorPrimaryDark"
+        app:tabIndicatorHeight="@dimen/tab_indicator_height"
+        app:tabIndicatorColor="@color/white"
+        app:tabTextColor="@color/transparent_white"
+        app:tabSelectedTextColor="@color/white"
+        app:tabGravity="fill" />
+
+    <!-- ViewPager controlled by the tabs -->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/browse_events_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/browse_events_tabs"
+        android:layout_alignParentBottom="true" />
+
+    <LinearLayout
+        android:id="@+id/search_bar_container"
+        android:background="@color/white"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+
+            <ImageView
+                android:id="@+id/show_drawer"
+                android:layout_marginLeft="16dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_menu_black_24dp"/>
+
+            <EditText
+                android:background="@android:color/transparent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toLeftOf="@+id/show_menu"
+                android:layout_toRightOf="@+id/show_drawer"
+                android:layout_centerVertical="true"
+                android:hint="@string/search_hackathons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/show_menu"
+                android:layout_marginRight="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_more_vert_black_24dp"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

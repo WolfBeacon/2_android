@@ -12,4 +12,7 @@
     <dimen name="indicator_circle_gap_width">4dp</dimen>
 
     <dimen name="tab_indicator_height">4dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="maps_viewpager_height">220dp</dimen>
 </resources>

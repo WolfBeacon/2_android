@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.osh.hackathonbrowser.HackathonActivity"
+    tools:showIn="@layout/activity_hackathon">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:id="@+id/short_name"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="U of T"
+            android:gravity="center"
+            android:textColor="@color/textPrimary"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="38sp"/>
+
+        <TextView
+            android:textSize="34sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="-4dp"
+            android:text="@string/hackathon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/campus"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:text="University of Toronto St. George Campus"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textColor="@color/textPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
+        <TextView
+            android:id="@+id/time"
+            android:text="7:00 AM - 3:30 PM"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/textPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
+        <View
+            android:layout_width="120dp"
+            android:layout_height="1.5dp"
+            android:background="@color/black"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/description"
+            android:text="@string/sample_text"
+            android:textColor="@color/textPrimary"
+            android:maxLines="5"
+            android:ellipsize="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="8dp" />
+
+        <CheckBox
+            android:id="@+id/travel_reimbursement_box"
+            android:layout_marginLeft="32dp"
+            android:enabled="false"
+            android:text="@string/travel_remimbursment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/bus_route_box"
+            android:layout_marginLeft="32dp"
+            android:text="@string/bus_route"
+            android:enabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-4dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Elements that may not exist -->
+        <LinearLayout
+            android:id="@+id/runtime_elements"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Maps -->
+        <!-- Top events ViewPager -->
+        <RelativeLayout
+            android:id="@+id/maps_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/maps_viewpager_height">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/maps_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.osh.hackathonbrowser.DotsPagerIndicator
+                android:id="@+id/maps_viewpager_indicator"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginBottom="4dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:text="@string/miscellaneous"
+            android:gravity="left"
+            android:textAllCaps="true"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="16dp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp">
+            
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/facebook_icon"
+                android:src="@drawable/ic_facebook_icon_black_24dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+            <TextView
+                android:id="@+id/facebook_link"
+                android:layout_marginLeft="8dp"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:text="@string/sample_text"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/facebook_icon"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/linkedin_icon"
+                android:src="@drawable/ic_linkedin_icon_black_24dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+            <TextView
+                android:id="@+id/linkedin_link"
+                android:layout_marginLeft="8dp"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:text="@string/sample_text"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/linkedin_icon"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/twitter_icon"
+                android:src="@drawable/ic_twitter_icon_black_24dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+            <TextView
+                android:id="@+id/twitter_link"
+                android:layout_marginLeft="8dp"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:text="@string/sample_text"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/twitter_icon"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/website_icon"
+                android:src="@drawable/ic_public_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp" />
+
+            <TextView
+                android:id="@+id/webiste_link"
+                android:layout_marginLeft="8dp"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:text="@string/sample_text"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/website_icon"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <!-- Dirty hack to mimic space taken by button layered above this layout. -->
+
+        <Button
+            android:background="@drawable/borderless_button"
+            android:text="@string/sample_text"
+            android:visibility="invisible"
+            android:layout_margin="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

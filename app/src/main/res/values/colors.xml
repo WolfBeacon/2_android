@@ -6,4 +6,8 @@
     <color name="white">#ffffff</color>
     <color name="transparent_white">#90ffffff</color>
     <color name="black">#000000</color>
+    <color name="textPrimary">#101010</color>
+    <color name="lightGreyBackground">#EAEAEA</color>
+    <color name="very_light_black">#40000000</color>
+    <color name="very_dark_black">#a0000000</color>
 </resources>

@@ -2,6 +2,7 @@ package com.osh.hackathonbrowser;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -79,6 +80,12 @@ public class ShowcaseFragment extends BaseFragment {
                             .transform(new ColorFilterTransformation(0x80000000)).into(showcaseImage);
                 }
             });
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(v.getContext(), HackathonActivity.class));
+                }
+            });
 
             return layout;
         }
@@ -101,7 +108,6 @@ public class ShowcaseFragment extends BaseFragment {
     }
 
     public class EventListingsAdapter extends FragmentStatePagerAdapter {
-        BaseFragment today;
         BaseFragment allEvents;
         BaseFragment favorites;
 
@@ -114,12 +120,9 @@ public class ShowcaseFragment extends BaseFragment {
             Fragment toReturn;
             switch (position){
                 case 0:
-                    toReturn = today == null ? today = EventListingFragment.newInstance(getString(R.string.today)) : today;
-                    break;
-                case 1:
                     toReturn = allEvents == null ? allEvents = EventListingFragment.newInstance(getString(R.string.all_events)) : allEvents;
                     break;
-                case 2:
+                case 1:
                     toReturn = favorites == null ? favorites = EventListingFragment.newInstance(getString(R.string.favorites)) : favorites;
                     break;
                 default:
@@ -130,7 +133,7 @@ public class ShowcaseFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override

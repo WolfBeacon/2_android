@@ -27,4 +27,17 @@
     <string name="guest_speakers">Guest Speakers</string>
     <string name="prizes">Prizes</string>
     <string name="miscellaneous">Miscellaneous</string>
+
+    <string name="day_string">Day %d</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="about_us">About Us</string>
+    <string name="wolfbeacon">WolfBeacon</string>
+    <string name="about_us_summary">A group of hackers developing a new hackathon app experience.</string>
+    <string name="notifications">Notifications</string>
+    <string name="event_reminders">Event reminders</string>
+    <string name="event_reminders_summary">Receive a notification when events you\'re going to are about to start.</string>
+    <string name="hackathon_start_ends">Hackathon Starts/Ends</string>
+    <string name="hackathon_start_ends_summary">Get alerted when the hackathon is about to start and end.</string>
+    <string name="action_schedule">Show schedule</string>
+    <string name="hackathon_schedule">Hackathon Schedule</string>
 </resources>

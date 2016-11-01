@@ -2,6 +2,7 @@ package com.osh.hackathonbrowser;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -89,6 +90,13 @@ public class EventListingFragment extends BaseFragment {
                             .resize(holder.icon.getWidth(), holder.icon.getHeight()).centerInside()
                             .into(holder.icon);
                     holder.mainContainer.removeOnLayoutChangeListener(this);
+                }
+            });
+            //RecyclerViews don't use onItemClickListeners(...); set on the largest view instead
+            holder.mainContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(v.getContext(), HackathonActivity.class));
                 }
             });
         }

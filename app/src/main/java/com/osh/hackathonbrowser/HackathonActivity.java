@@ -16,6 +16,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -256,6 +259,7 @@ public class HackathonActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //TODO: Once we have a backend, at EXTRAs that can take in a hackathon ID
         hackathon = FakeHackathon.getFakeHackathon();
     }
 
@@ -283,7 +287,10 @@ public class HackathonActivity extends AppCompatActivity {
                     timeFormat.format(new Date(hackathon.getEndTimeUtc()))));
         descriptionTextView.setText(hackathon.getDescription());
         travelReimbursementBox.setChecked(hackathon.hasTravelReimbursement());
-        busRouteBox.setChecked(hackathon.hasBusRoute());
+        if(hackathon.hasBusRoute()){
+            busRouteBox.setChecked(true);
+            //TODO: Display more data once it's clear what the API is going to feed us
+        }
 
         //Sponsors (cards)
         if(hackathon.getSponsors() != null && !hackathon.getSponsors().isEmpty()){
@@ -323,9 +330,13 @@ public class HackathonActivity extends AppCompatActivity {
             containerHolder.addView(reimbursementTextView);
         }
 
-        //Maps (images + dots)
-        mapsViewpager.setAdapter(new MapsAdapter(hackathon.getMaps()));
-        mapsIndicator.attachViewPager(mapsViewpager);
+        //Maps (images + dots) -- can be empty
+        if(hackathon.getMaps() != null) {
+            mapsViewpager.setAdapter(new MapsAdapter(hackathon.getMaps()));
+            mapsIndicator.attachViewPager(mapsViewpager);
+        } else {
+            mapsViewpager.setVisibility(View.GONE);
+        }
 
         //Miscellaneous (Facebook, LinkedIn, Twitter, website)
         attachLink(facebookLink, hackathon.getFacebook());
@@ -335,15 +346,35 @@ public class HackathonActivity extends AppCompatActivity {
     }
 
     private void attachLink(TextView v, final String link){
-        v.setText(link);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent viewLink = new Intent(Intent.ACTION_VIEW);
-                viewLink.setData(Uri.parse(link));
-                startActivity(viewLink);
-            }
-        });
+        if(link != null) {
+            v.setText(link);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent viewLink = new Intent(Intent.ACTION_VIEW);
+                    viewLink.setData(Uri.parse(link));
+                    startActivity(viewLink);
+                }
+            });
+        } else {
+            v.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_hackathon, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_schedule:
+                startActivity(new Intent(this, ScheduleActivity.class));
+            default:
+                return false;
+        }
     }
 
     private RecyclerView createBigCardWrapper(ViewGroup containerHolder) {

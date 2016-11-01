@@ -31,5 +31,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.osh.hackathonbrowser.MainActivity" />
         </activity>
+
+        <service
+            android:name=".background.NotificationsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".ScheduleActivity"
+            android:label="@string/hackathon_schedule"
+            android:parentActivityName=".HackathonActivity">
+        </activity>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.osh.hackathonbrowser.MainActivity" />
+        </activity>
     </application>
+
 </manifest>

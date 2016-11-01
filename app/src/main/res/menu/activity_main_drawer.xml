@@ -15,9 +15,9 @@
     <item android:title="More">
         <menu>
             <item
-                android:id="@+id/more_1"
-                android:icon="@mipmap/ic_launcher"
-                android:title="More 1" />
+                android:id="@+id/action_settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/action_settings" />
         </menu>
     </item>
 </menu>

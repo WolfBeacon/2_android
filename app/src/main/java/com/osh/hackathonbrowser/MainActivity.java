@@ -1,5 +1,6 @@
 package com.osh.hackathonbrowser;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch(item.getItemId()){
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
         }
 
         closeDrawer();

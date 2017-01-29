@@ -3,6 +3,7 @@
     package="com.osh.hackathonbrowser">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="false"
@@ -31,5 +32,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.osh.hackathonbrowser.MainActivity" />
         </activity>
+
+        <service
+            android:name=".background.NotificationsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name="com.auth0.android.lock.LockActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Lock.Theme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="wolf-beacon.auth0.com"
+                    android:pathPrefix="/android/com.osh.hackathonbrowser/callback"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.auth0.android.provider.WebAuthActivity" />
     </application>
 </manifest>

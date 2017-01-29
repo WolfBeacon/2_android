@@ -197,5 +197,5 @@ public class FakeHackathon {
                 "https://linkedin.com/hackathon",
                 "https://facebook.com/hackathon",
                 Constants.DEFAULT_FAKE_URL);
-    }   
+    }
 }

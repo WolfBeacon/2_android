@@ -7,4 +7,18 @@ public class Constants {
     public static final String DEFAULT_FAKE_COMPANY = "https://img.stackshare.io/service/43/rrsj746a.png";
     public static final String DEFAULT_FAKE_MAP = "http://www.columbia.edu/~bo8/img/columbiaMap.png";
     public static final String DEFAULT_FAKE_URL = "http://todo.com";
+
+    /** A listing of IDs that wouldn't fit in XML. **/
+    public class Ids {
+        public static final int TIME_UPDATE_NOTIFICATION_ID = 500;
+        public static final int TIME_UPDATE_REQUEST_CODE = 1000;
+    }
+
+    public class URLs {
+        public static final String API_URL = "https://osh-api.herokuapp.com";
+    }
+
+    public class Prefs {
+        public static final String CREDS_STRING = "credentials";
+    }
 }

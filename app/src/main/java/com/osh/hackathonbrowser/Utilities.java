@@ -2,9 +2,13 @@ package com.osh.hackathonbrowser;
 
 import android.content.Context;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.auth0.android.Auth0;
+import com.auth0.android.result.Credentials;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 public class Utilities {
@@ -20,5 +24,21 @@ public class Utilities {
                 view.removeOnLayoutChangeListener(this);
             }
         });
+    }
+
+    public static Auth0 getAuthZero(){
+        return new Auth0("vIZ8UrlA4vByjltC1mmeTTjGCJzOokEL", "wolf-beacon.auth0.com");
+    }
+
+    public static Credentials getCredentials(Context context){
+        String jsonifiedCreds = PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.Prefs.CREDS_STRING, null);
+        return jsonifiedCreds == null ? null : new Gson().fromJson(jsonifiedCreds, Credentials.class);
+    }
+
+    public static void storeCredentials(Context context, Credentials creds){
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(Constants.Prefs.CREDS_STRING, new Gson().toJson(creds))
+                .commit();
     }
 }

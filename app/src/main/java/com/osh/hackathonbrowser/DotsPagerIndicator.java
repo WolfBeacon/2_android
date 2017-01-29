@@ -7,10 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * A custom View that enables indicators for a ViewPager. Remember to call
- * {@linkplain DotsPagerIndicator#attachViewPager(ViewPager)}.
- */
 public class DotsPagerIndicator extends View implements ViewPager.OnPageChangeListener {
     private Paint lightPaint;
     private Paint darkPaint;
@@ -73,10 +69,6 @@ public class DotsPagerIndicator extends View implements ViewPager.OnPageChangeLi
         return pager != null;
     }
 
-    /**
-     * Attach the ViewPager to enable the dots view.
-     * @param pager A ViewPager.
-     */
     public void attachViewPager(ViewPager pager){
         this.pager = pager;
         pager.addOnPageChangeListener(this);

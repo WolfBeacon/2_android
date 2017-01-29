@@ -16,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -281,6 +283,22 @@ public class HackathonActivity extends AppCompatActivity {
         //Populate with data from fake hackathon
         //We inject most of the views on-the-fly by inflating layouts because we don't always know what fields will be present
         populateData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_hackathon, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_schedule:
+                startActivity(new Intent(this, ScheduleActivity.class));
+            default:
+                return false;
+        }
     }
 
     private void populateData() {

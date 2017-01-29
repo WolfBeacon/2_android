@@ -110,6 +110,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch(item.getItemId()){
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
         }
 
         closeDrawer();

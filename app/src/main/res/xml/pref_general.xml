@@ -1,0 +1,25 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/notifications">
+
+        <CheckBoxPreference
+            android:title="@string/hackathon_start_ends"
+            android:summary="@string/hackathon_start_ends_summary"
+            android:key="hackathon_start_ends_pref"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:title="@string/event_reminders"
+            android:summary="@string/event_reminders_summary"
+            android:key="event_reminders_pref"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/about_us">
+
+        <Preference
+            android:title="@string/wolfbeacon"
+            android:summary="@string/about_us_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>

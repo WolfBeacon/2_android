@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:background="#f0f0f0"
+        android:id="@+id/list_item_cal_entry_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/cal_entry_required"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_check_circle_black_36dp" />
+
+        <LinearLayout
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/cal_entry_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="18sp"
+                android:textColor="#101010"
+                android:maxLines="3"
+                android:text="@string/sample_text"
+                android:layout_marginBottom="4dp"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/cal_entry_subtitle"
+                android:layout_width="match_parent"
+                android:gravity="start"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="@string/sample_text"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="#303030" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/list_item_cal_header_content"
+        android:background="#d5d5d5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:paddingStart="16dp"
+        android:visibility="gone">
+
+        <!-- The "2:30 PM" header text -->
+        <TextView
+            android:id="@+id/schedule_header_text"
+            android:layout_gravity="center_vertical|start"
+            android:text="@string/app_name"
+            android:textSize="14sp"
+            android:textColor="#404040"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+</FrameLayout>

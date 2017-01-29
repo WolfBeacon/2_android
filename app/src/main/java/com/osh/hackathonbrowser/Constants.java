@@ -20,5 +20,7 @@ public class Constants {
 
     public class Prefs {
         public static final String CREDS_STRING = "credentials";
+        public static final String HACKATHON_STARTS_END_BOOL = "hackathon_start_ends_pref";
+        public static final String EVENT_REMINDER_BOOL = "event_reminders_pref";
     }
 }

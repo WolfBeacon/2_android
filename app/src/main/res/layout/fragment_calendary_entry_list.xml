@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <HorizontalScrollView
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:id="@+id/day_selector_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/day_selector_container"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </HorizontalScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/day_selector_scrollview"
+        android:id="@+id/list"
+        android:name="org.maclyn.scheduledemo.CalendarEntryFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="org.maclyn.scheduledemo.CalendarEntryFragment"
+        tools:listitem="@layout/list_item_calendar_entry" />
+</RelativeLayout>
+
+

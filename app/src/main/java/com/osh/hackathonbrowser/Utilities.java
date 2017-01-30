@@ -17,6 +17,8 @@ public class Utilities {
     }
 
     public static void loadUrlIntoImageView(final Context context, final ImageView view, final String url){
+        if(view.getWidth() > 0 && view.getHeight() > 0) //Has been laid out?
+            Picasso.with(context).load(url).resize(view.getWidth(), view.getHeight()).centerInside().into(view);
         view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -39,6 +41,13 @@ public class Utilities {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(Constants.Prefs.CREDS_STRING, new Gson().toJson(creds))
+                .commit();
+    }
+
+    public static void clearCredentials(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(Constants.Prefs.CREDS_STRING)
                 .commit();
     }
 }

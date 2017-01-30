@@ -44,4 +44,8 @@
     <string name="auth0_client_id">vIZ8UrlA4vByjltC1mmeTTjGCJzOokEL</string>
     <string name="auth0_domain">wolf-beacon.auth0.com</string>
     <string name="you_must_sign_in">You must sign in to view hackathons.</string>
+    <string name="sign_in_error">Sign in error.</string>
+    <string name="logout">Logout</string>
+    <string name="cancel">Cancel</string>
+    <string name="would_you_like_sign_out">Would you like to sign out?</string>
 </resources>

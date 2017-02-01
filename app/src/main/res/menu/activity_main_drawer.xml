@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">\
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/tab_1"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Tab 1" />
+            android:id="@+id/explore_tab"
+            android:icon="@drawable/ic_dashboard_black_24dp"
+            android:title="@string/explore" />
         <item
-            android:id="@+id/tab_2"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Tab 2" />
+            android:id="@+id/today_tab"
+            android:icon="@drawable/ic_today_black_24dp"
+            android:title="@string/attending" />
     </group>
 
     <item android:title="More">

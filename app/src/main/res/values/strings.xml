@@ -48,4 +48,7 @@
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
     <string name="would_you_like_sign_out">Would you like to sign out?</string>
+    <string name="explore">Explore</string>
+    <string name="attending">Attending</string>
+    <string name="dummy_fragment">Dummy Fragment</string>
 </resources>

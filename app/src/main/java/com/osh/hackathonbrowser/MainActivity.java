@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         navigationView.setNavigationItemSelectedListener(this);
         //Replace with first fragment
-        replaceFragment(-1);
+        replaceFragment(R.id.explore_tab);
 
         Auth0 auth0 = Utilities.getAuthZero();
         lockCallback = new AuthenticationCallback() {
@@ -212,6 +212,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch(item.getItemId()){
+            case R.id.today_tab:
+            case R.id.explore_tab:
+                if(!item.isChecked()) replaceFragment(item.getItemId());
+                break;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
@@ -222,9 +226,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void replaceFragment(int itemId){
-        //TODO: Actually implement replacement logic that works for more than just main page
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container, ShowcaseFragment.newInstance());
+        switch(itemId) {
+            case R.id.explore_tab:
+                navigationView.getMenu().findItem(R.id.explore_tab).setChecked(true);
+                ft.replace(R.id.fragment_container, ShowcaseFragment.newInstance());
+                break;
+            case R.id.today_tab:
+                navigationView.getMenu().findItem(R.id.today_tab).setChecked(true);
+                ft.replace(R.id.fragment_container, DummyFragment.newInstance());
+                break;
+        }
         getSupportActionBar().hide();
         ft.commit();
     }

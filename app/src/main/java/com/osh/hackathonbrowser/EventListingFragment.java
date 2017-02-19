@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +17,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.osh.hackathonbrowser.api.ApiFactory;
+import com.osh.hackathonbrowser.api.response.HackathonResponse;
 import com.osh.hackathonbrowser.model.HackathonEvent;
+import com.squareup.okhttp.internal.Util;
 import com.squareup.picasso.Picasso;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import static butterknife.ButterKnife.findById;
 
@@ -32,13 +44,19 @@ public class EventListingFragment extends BaseFragment {
     public static final String TAG = "EventListingFragment";
 
     public static final String TITLE_STRING_ARGUMENT = "title";
+    public static final String LISTING_MODE_ARGUMENT = "listing_mode";
+
+    public static final int LISTING_MODE_NEARBY_HACKS = 1;
+    public static final int LISTING_MODE_FAVORITE_HACKS = 2;
 
     private String title = "(not set)";
+    private int mode = LISTING_MODE_FAVORITE_HACKS;
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    List<HackathonEvent> events = new ArrayList<>();
+    FragmentHostInterface host;
+    List<HackathonResponse> events = new ArrayList<>();
     EventAdapter adapter;
 
     public class EventAdapterViewHolder extends RecyclerView.ViewHolder {
@@ -61,9 +79,10 @@ public class EventListingFragment extends BaseFragment {
     }
 
     public class EventAdapter extends RecyclerView.Adapter<EventAdapterViewHolder> {
-        private List<HackathonEvent> events;
+        private List<HackathonResponse> events;
+        private int endOfResultsStringRes = R.string.end_of_results;
 
-        public EventAdapter(List<HackathonEvent> events){
+        public EventAdapter(List<HackathonResponse> events){
             this.events = events;
         }
 
@@ -76,20 +95,24 @@ public class EventListingFragment extends BaseFragment {
         @Override
         public void onBindViewHolder(final EventAdapterViewHolder holder, int position) {
             holder.noItems.setVisibility(position == getItemCount() - 1 ? View.VISIBLE : View.GONE);
+            holder.noItems.setText(endOfResultsStringRes);
             holder.mainContainer.setVisibility(position == getItemCount() - 1 ? View.GONE : View.VISIBLE);
             if(position == getItemCount() - 1) return;
 
-            final HackathonEvent event = events.get(position);
+            final HackathonResponse event = events.get(position);
             holder.title.setText(event.getTitle());
-            holder.subtitle.setText(event.getSubtitle());
-            holder.description.setText(event.getDescription());
+            holder.subtitle.setText(event.getHost());
+            holder.description.setText(event.getLocation());
+            holder.icon.setImageBitmap(null);
             holder.mainContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    Picasso.with(v.getContext()).load(event.getIconUrl())
-                            .resize(holder.icon.getWidth(), holder.icon.getHeight()).centerInside()
-                            .into(holder.icon);
-                    holder.mainContainer.removeOnLayoutChangeListener(this);
+                    if(event.getIconUrl() != null) {
+                        Picasso.with(v.getContext()).load(event.getIconUrl())
+                                .resize(holder.icon.getWidth(), holder.icon.getHeight()).centerInside()
+                                .into(holder.icon);
+                        holder.mainContainer.removeOnLayoutChangeListener(this);
+                    }
                 }
             });
             //RecyclerViews don't use onItemClickListeners(...); set on the largest view instead
@@ -105,6 +128,10 @@ public class EventListingFragment extends BaseFragment {
         public int getItemCount() {
             return events.size() + 1; //For end of list at end
         }
+
+        public void setEndOfResultsStringResource(int resource){
+            endOfResultsStringRes = resource;
+        }
     }
 
     public EventListingFragment(){
@@ -115,11 +142,12 @@ public class EventListingFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
     }
 
-    public static EventListingFragment newInstance(String title){
+    public static EventListingFragment newInstance(String title, int mode){
         EventListingFragment fragment = new EventListingFragment();
 
         Bundle args = new Bundle();
         args.putString(TITLE_STRING_ARGUMENT, title);
+        args.putInt(LISTING_MODE_ARGUMENT, mode);
         fragment.setArguments(args);
 
         return fragment;
@@ -129,20 +157,20 @@ public class EventListingFragment extends BaseFragment {
     public void setArguments(Bundle args) {
         super.setArguments(args);
         this.title = args.getString(TITLE_STRING_ARGUMENT);
+        this.mode = args.getInt(LISTING_MODE_ARGUMENT);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        host = (FragmentHostInterface) activity;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_event_listing, container, false);
-
         ButterKnife.bind(this, v);
-
         return v;
     }
 
@@ -158,10 +186,49 @@ public class EventListingFragment extends BaseFragment {
         recyclerView.setAdapter(adapter);
 
         events.clear();
-        events.add(new HackathonEvent("HackNY", "Columbia University", "The spring version of HackNY, this hackathon encourages lipsum etc.", "https://s.graphiq.com/sites/default/files/728/media/images/t2/Columbia_University_College_of_Physicians_and_Surgeons_2_403319.jpg"));
-        events.add(new HackathonEvent("U of T Hacks", "University of Toronto", "A major hackathon held each year, this hackathon encourages lipsum etc.", "http://cupanion.com/wordpress/wp-content/uploads/2015/09/University-of-Toronto-logo_0-1.jpg"));
-
+        adapter.setEndOfResultsStringResource(R.string.loading_hackathons);
         adapter.notifyDataSetChanged();
+
+        if(mode == LISTING_MODE_NEARBY_HACKS){
+            GregorianCalendar aWeekAgo = new GregorianCalendar();
+            aWeekAgo.roll(Calendar.WEEK_OF_YEAR, -1);
+            GregorianCalendar aYearForward = new GregorianCalendar();
+            aYearForward.roll(Calendar.YEAR, 1);
+            Pair<Double, Double> location = host.getLocation();
+            if(location == null) location = new Pair<>(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+
+            Log.d(TAG, "Type: " + Utilities.getCredentials(getContext()).getType());
+            Log.d(TAG, "ID token: " + Utilities.getCredentials(getContext()).getIdToken());
+
+            ApiFactory.getInstance().listHackathons(
+                    Utilities.API_DATE_FORMAT.format(aWeekAgo.getTime()),
+                    Utilities.API_DATE_FORMAT.format(aYearForward.getTime()),
+                    String.valueOf(location.first),
+                    String.valueOf(location.second),
+                    "distance",
+                    new Callback<HackathonResponse[]>() {
+                        @Override
+                        public void success(HackathonResponse[] hackathonResponses, Response response) {
+                            Log.d(TAG, "Success!");
+                            events.clear();
+                            for(HackathonResponse r : hackathonResponses){
+                                events.add(r);
+                            }
+                            adapter.setEndOfResultsStringResource(R.string.end_of_results);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.e(TAG, "Failed to load!", error);
+                            adapter.setEndOfResultsStringResource(R.string.end_of_results);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+        } else if (mode == LISTING_MODE_FAVORITE_HACKS){
+            adapter.setEndOfResultsStringResource(R.string.end_of_results);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -172,5 +239,10 @@ public class EventListingFragment extends BaseFragment {
     @Override
     public String getNameResource(Context context) {
         return title;
+    }
+
+    @Override
+    public boolean onToolbarItemSelected(int itemId) {
+        return false;
     }
 }

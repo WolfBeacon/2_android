@@ -41,7 +41,7 @@
     <string name="action_schedule">Show schedule</string>
     <string name="hackathon_schedule">Hackathon Schedule</string>
 
-    <string name="auth0_client_id">vIZ8UrlA4vByjltC1mmeTTjGCJzOokEL</string>
+    <string name="auth0_client_id">cMr82TS37R0DPqLSnC0gCWn2vV3qHK7A</string>
     <string name="auth0_domain">wolf-beacon.auth0.com</string>
     <string name="you_must_sign_in">You must sign in to view hackathons.</string>
     <string name="sign_in_error">Sign in error.</string>
@@ -51,4 +51,6 @@
     <string name="explore">Explore</string>
     <string name="attending">Attending</string>
     <string name="dummy_fragment">Dummy Fragment</string>
+    <string name="loading_hackathons">LOADING HACKATHONS</string>
+    <string name="location_permission_expl">We\'d like permission to get your location to show nearby hackathons.</string>
 </resources>

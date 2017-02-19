@@ -81,4 +81,9 @@ public class DummyFragment extends BaseFragment {
     public String getNameResource(Context context) {
         return getString(R.string.dummy_fragment);
     }
+
+    @Override
+    public boolean onToolbarItemSelected(int itemId) {
+        return false;
+    }
 }

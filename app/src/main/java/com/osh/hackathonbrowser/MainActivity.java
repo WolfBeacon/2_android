@@ -1,19 +1,31 @@
 package com.osh.hackathonbrowser;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.PermissionChecker;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,23 +52,26 @@ import butterknife.ButterKnife;
 import butterknife.OnLongClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.R.id.toggle;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FragmentHostInterface {
     private static final String TAG = "MainActivity";
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    private static final int LOCATION_REQUEST_CODE = 501;
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
 
+    ActionBarDrawerToggle toggle;
+
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
-    Credentials creds;
-    boolean credsValidated = false;
     Lock lock;
     LockCallback lockCallback;
+
+    BaseFragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +80,11 @@ public class MainActivity extends AppCompatActivity
         //Setup main UI
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
         navigationView.setNavigationItemSelectedListener(this);
         //Replace with first fragment
         replaceFragment(R.id.explore_tab);
 
-        Auth0 auth0 = Utilities.getAuthZero();
+        Auth0 auth0 = Utilities.getAuthZero(this);
         lockCallback = new AuthenticationCallback() {
             @Override
             public void onAuthentication(Credentials credentials) {
@@ -105,62 +119,43 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data); //Handles dispatch to fragments, if ever needed
+
+        switch (requestCode){
+            case LOCATION_REQUEST_CODE: //Nothing to actually do here.
+                break;
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
-        creds = Utilities.getCredentials(this);
+        Credentials creds = Utilities.getCredentials(this);
         if(creds == null){
             startActivity(lock.newIntent(this));
         } else {
-            //Validate credentials before performing API call to fetch hackathons
             validateCredentials();
         }
     }
 
     private void validateCredentials() {
-        final AuthenticationAPIClient aac = new AuthenticationAPIClient(Utilities.getAuthZero());
-        aac.tokenInfo(creds.getIdToken()).start(new BaseCallback<UserProfile, AuthenticationException>() {
+        Utilities.validateCredentials(this, new Utilities.OnCredentialValidateListener() {
             @Override
-            public void onSuccess(UserProfile payload) {
-                String name = payload.getName();
-                String email = payload.getEmail();
-                String imageUrl = payload.getPictureURL();
-
-                onAuthenticated(name, email, imageUrl);
+            public void onSuccess(String name, String email, String profileImage) {
+                onAuthenticated(name, email, profileImage);
             }
 
             @Override
-            public void onFailure(AuthenticationException error) {
-                //ID invalid *or* network is down; recheck ID
-                aac.delegationWithRefreshToken(creds.getRefreshToken()).start(new BaseCallback<Delegation, AuthenticationException>() {
+            public void onFailure() {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onSuccess(Delegation payload) {
-                        String token = payload.getIdToken();
-                        long expiryDate = payload.getExpiresIn();
-                        String type = payload.getType();
-
-                        Utilities.storeCredentials(MainActivity.this, new Credentials(token,
-                                creds.getAccessToken(),
-                                type,
-                                creds.getRefreshToken()));
-                        validateCredentials();
-                    }
-
-                    @Override
-                    public void onFailure(AuthenticationException error) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(MainActivity.this, R.string.sign_in_error, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                        //ID + refresh token are dead; server revocation likely
-                        //Clear creds + open lock
-                        Utilities.clearCredentials(MainActivity.this);
-                        startActivity(lock.newIntent(MainActivity.this));
+                    public void run() {
+                        Toast.makeText(MainActivity.this, R.string.sign_in_error, Toast.LENGTH_SHORT).show();
                     }
                 });
+                startActivity(lock.newIntent(MainActivity.this));
             }
         });
     }
@@ -230,14 +225,15 @@ public class MainActivity extends AppCompatActivity
         switch(itemId) {
             case R.id.explore_tab:
                 navigationView.getMenu().findItem(R.id.explore_tab).setChecked(true);
-                ft.replace(R.id.fragment_container, ShowcaseFragment.newInstance());
+                currentFragment = ShowcaseFragment.newInstance();
+                ft.replace(R.id.fragment_container, currentFragment);
                 break;
             case R.id.today_tab:
                 navigationView.getMenu().findItem(R.id.today_tab).setChecked(true);
-                ft.replace(R.id.fragment_container, DummyFragment.newInstance());
+                currentFragment = DummyFragment.newInstance();
+                ft.replace(R.id.fragment_container, currentFragment);
                 break;
         }
-        getSupportActionBar().hide();
         ft.commit();
     }
 
@@ -252,7 +248,60 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public Credentials getCredentials() {
-        return credsValidated ? creds : null;
+    public DrawerLayout getDrawerLayout() {
+        return drawer;
+    }
+
+    @Override
+    @TargetApi(23)
+    public Pair<Double, Double> getLocation() {
+        if(PermissionChecker.checkCallingOrSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PermissionChecker.PERMISSION_GRANTED){
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Criteria c = new Criteria();
+            c.setAccuracy(Criteria.ACCURACY_COARSE);
+            String locationProvider = lm.getBestProvider(c, true);
+
+            Location l = lm.getLastKnownLocation(locationProvider);
+            if(l != null) return new Pair<>(l.getLatitude(), l.getLongitude());
+        } else { //Request location permission
+            Toast.makeText(this, R.string.location_permission_expl, Toast.LENGTH_SHORT).show();
+            requestPermissions(new String[] { Manifest.permission.ACCESS_COARSE_LOCATION }, LOCATION_REQUEST_CODE);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(menuResourceId != -1) getMenuInflater().inflate(menuResourceId, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return toggle.onOptionsItemSelected(item) ||
+                (currentFragment != null && currentFragment.onToolbarItemSelected(item.getItemId()));
+    }
+
+    int menuResourceId = -1;
+
+    @Override
+    public void attachNewToolbar(Toolbar toolbar, int menuResId) {
+        //Ugh.
+        if(toggle != null){
+            drawer.removeDrawerListener(toggle);
+        }
+
+        menuResourceId = menuResId;
+        setSupportActionBar(toolbar);
+        invalidateOptionsMenu();
+        toggle = new ActionBarDrawerToggle(this,
+                drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.setDrawerIndicatorEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
     }
 }

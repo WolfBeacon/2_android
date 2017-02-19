@@ -3,101 +3,134 @@ package com.osh.hackathonbrowser.api.response;
 import com.google.gson.annotations.SerializedName;
 
 public class HackathonResponse {
-	private int id;
+	private long id;
 
-	@SerializedName("ownerid")
-	private int ownerId;
+	private String title;
 
-	private String name;
+	private String startDate;
 
-	private LocationPart location;
+	private String endDate;
 
-	@SerializedName("startdate")
-	private long startDate;
+	private String lastUpdatedDate;
 
-	@SerializedName("enddate")
-	private long endDate;
+	private int year;
 
-	@SerializedName("currentstate")
-	private int currentState;
+	private String location;
 
-	private PrizePart[] prizes;
+	private String host;
 
-	@SerializedName("reimbursements")
-	private boolean reimbursementsOffered;
+	@SerializedName("length")
+	private int duration;
 
-	@SerializedName("busesoffered")
-	private boolean busesOffered;
+	private String size;
 
-	@SerializedName("buslocations")
-	private BusPart[] busLocations;
+	@SerializedName("travel")
+	private boolean travelProvided;
 
-	@SerializedName("sociallinks")
-	private SocialLinkPart[] socialLinks;
+	@SerializedName("prize")
+	private boolean prizesProvided;
 
-	private HardwarePart[] hardware;
+	@SerializedName("highSchoolers")
+	private boolean highSchoolersAllowed;
 
-	private String map;
+	private String cost;
 
-	private String metadata;
+	private String facebookLink;
 
-	public int getId() {
+	private String twitterLink;
+
+	private String googlePlusLink;
+
+	@SerializedName("imageLink")
+	private String iconUrl;
+
+	private double latitude;
+
+	private double longitude;
+
+	private String notes;
+
+	public long getId() {
 		return id;
 	}
 
-	public int getOwnerId() {
-		return ownerId;
+	public String getTitle() {
+		return title;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public LocationPart getLocation() {
-		return location;
-	}
-
-	public long getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public long getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public int getCurrentState() {
-		return currentState;
+	public String getLastUpdatedDate() {
+		return lastUpdatedDate;
 	}
 
-	public PrizePart[] getPrizes() {
-		return prizes;
+	public int getYear() {
+		return year;
 	}
 
-	public boolean isReimbursementsOffered() {
-		return reimbursementsOffered;
+	public String getLocation() {
+		return location;
 	}
 
-	public boolean isBusesOffered() {
-		return busesOffered;
+	public String getHost() {
+		return host;
 	}
 
-	public BusPart[] getBusLocations() {
-		return busLocations;
+	public int getDuration() {
+		return duration;
 	}
 
-	public SocialLinkPart[] getSocialLinks() {
-		return socialLinks;
+	public String getSize() {
+		return size;
 	}
 
-	public HardwarePart[] getHardware() {
-		return hardware;
+	public boolean isTravelProvided() {
+		return travelProvided;
 	}
 
-	public String getMap() {
-		return map;
+	public boolean arePrizesProvided() {
+		return prizesProvided;
 	}
 
-	public String getMetadata() {
-		return metadata;
+	public boolean areHighSchoolersAllowed() {
+		return highSchoolersAllowed;
+	}
+
+	public String getCost() {
+		return cost;
+	}
+
+	public String getFacebookLink() {
+		return facebookLink;
+	}
+
+	public String getTwitterLink() {
+		return twitterLink;
+	}
+
+	public String getGooglePlusLink() {
+		return googlePlusLink;
+	}
+
+	public String getIconUrl() {
+		return iconUrl;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public String getNotes() {
+		return notes;
 	}
 }

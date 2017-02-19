@@ -5,13 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -37,6 +42,12 @@ import static butterknife.ButterKnife.findById;
 public class ShowcaseFragment extends BaseFragment {
     public static final String TAG = "ShowcaseFragment";
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout toolbarLayout;
+
     @BindView(R.id.events_viewpager)
     ViewPager eventsViewpager;
 
@@ -45,9 +56,6 @@ public class ShowcaseFragment extends BaseFragment {
 
     @BindView(R.id.browse_events_viewpager)
     ViewPager browseEventsViewpager;
-
-    @BindView(R.id.show_menu)
-    ImageView showMenuButton;
 
     @BindView(R.id.events_viewpager_indicator)
     DotsPagerIndicator eventsIndicator;
@@ -86,7 +94,6 @@ public class ShowcaseFragment extends BaseFragment {
                     startActivity(new Intent(v.getContext(), HackathonActivity.class));
                 }
             });
-
             return layout;
         }
 
@@ -120,13 +127,15 @@ public class ShowcaseFragment extends BaseFragment {
             Fragment toReturn;
             switch (position){
                 case 0:
-                    toReturn = allEvents == null ? allEvents = EventListingFragment.newInstance(getString(R.string.all_events)) : allEvents;
+                    toReturn = allEvents == null ? allEvents =
+                            EventListingFragment.newInstance(getString(R.string.all_events), EventListingFragment.LISTING_MODE_NEARBY_HACKS) : allEvents;
                     break;
                 case 1:
-                    toReturn = favorites == null ? favorites = EventListingFragment.newInstance(getString(R.string.favorites)) : favorites;
+                    toReturn = favorites == null ? favorites =
+                            EventListingFragment.newInstance(getString(R.string.favorites), EventListingFragment.LISTING_MODE_FAVORITE_HACKS) : favorites;
                     break;
                 default:
-                    toReturn = EventListingFragment.newInstance("Default");
+                    toReturn = EventListingFragment.newInstance("Default", EventListingFragment.LISTING_MODE_FAVORITE_HACKS);
             }
             return toReturn;
         }
@@ -176,6 +185,9 @@ public class ShowcaseFragment extends BaseFragment {
         browseEventsViewpager.setAdapter(new EventListingsAdapter(getChildFragmentManager()));
         tabs.setupWithViewPager(browseEventsViewpager);
 
+        toolbarLayout.setTitleEnabled(false);
+        fhi.attachNewToolbar(toolbar, R.menu.menu_main);
+
         return v;
     }
 
@@ -189,6 +201,7 @@ public class ShowcaseFragment extends BaseFragment {
         super.onPause();
     }
 
+    /*
     @OnClick(R.id.show_drawer)
     public void clickShowDrawer(){
         fhi.openDrawer();
@@ -207,9 +220,15 @@ public class ShowcaseFragment extends BaseFragment {
         });
         pm.show();
     }
+    */
 
     @Override
     public String getNameResource(Context context) {
         return getString(R.string.showcase_fragment);
+    }
+
+    @Override
+    public boolean onToolbarItemSelected(int itemId) {
+        return true;
     }
 }

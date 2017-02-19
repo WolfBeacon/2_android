@@ -8,6 +8,10 @@ public class Constants {
     public static final String DEFAULT_FAKE_MAP = "http://www.columbia.edu/~bo8/img/columbiaMap.png";
     public static final String DEFAULT_FAKE_URL = "http://todo.com";
 
+    //"NYC"
+    public static final Double DEFAULT_LONGITUDE = 40.73;
+    public static final Double DEFAULT_LATITUDE = -73.95;
+
     /** A listing of IDs that wouldn't fit in XML. **/
     public class Ids {
         public static final int TIME_UPDATE_NOTIFICATION_ID = 500;
@@ -15,7 +19,7 @@ public class Constants {
     }
 
     public class URLs {
-        public static final String API_URL = "https://osh-api.herokuapp.com";
+        public static final String API_URL = "http://api.wolfbeacon.com/v1/";
     }
 
     public class Prefs {

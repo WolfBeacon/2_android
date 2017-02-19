@@ -1,52 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.osh.hackathonbrowser.MainActivity">
 
-    <!-- Top events ViewPager -->
-    <RelativeLayout
-        android:id="@+id/top_events_container"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/events_viewpager_height">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/events_viewpager"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <com.osh.hackathonbrowser.DotsPagerIndicator
-            android:id="@+id/events_viewpager_indicator"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_marginBottom="4dp" />
-    </RelativeLayout>
+            <!-- Top events ViewPager -->
+            <RelativeLayout
+                app:layout_collapseMode="parallax"
+                android:id="@+id/top_events_container"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:layout_height="match_parent">
 
-    <!-- Tabs for more granular browsing -->
-    <android.support.design.widget.TabLayout
-        android:id="@+id/browse_events_tabs"
-        android:layout_below="@+id/top_events_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabMode="fixed"
-        app:tabBackground="@color/colorPrimaryDark"
-        app:tabIndicatorHeight="@dimen/tab_indicator_height"
-        app:tabIndicatorColor="@color/white"
-        app:tabTextColor="@color/transparent_white"
-        app:tabSelectedTextColor="@color/white"
-        app:tabGravity="fill" />
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/events_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.osh.hackathonbrowser.DotsPagerIndicator
+                    android:id="@+id/events_viewpager_indicator"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginBottom="64dp" /> <!-- ?attr/actionBarHeight + 8dp -->
+            </RelativeLayout>
+
+            <!-- Tabs for more granular browsing -->
+            <android.support.design.widget.TabLayout
+                android:id="@+id/browse_events_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                app:layout_collapseMode="pin"
+                app:tabMode="fixed"
+                app:tabBackground="@color/colorPrimary"
+                app:tabIndicatorHeight="@dimen/tab_indicator_height"
+                app:tabIndicatorColor="@color/white"
+                app:tabTextColor="@color/transparent_white"
+                app:tabSelectedTextColor="@color/white"
+                app:tabGravity="fill" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                style="@style/AppTheme.AppBarOverlay"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="parallax" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <!-- ViewPager controlled by the tabs -->
     <android.support.v4.view.ViewPager
         android:id="@+id/browse_events_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/browse_events_tabs"
-        android:layout_alignParentBottom="true" />
-
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <!--
     <LinearLayout
         android:id="@+id/search_bar_container"
         android:background="@color/white"
@@ -74,7 +96,6 @@
                 android:background="@android:color/transparent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_toLeftOf="@+id/show_menu"
                 android:layout_toRightOf="@+id/show_drawer"
                 android:layout_centerVertical="true"
                 android:hint="@string/search_hackathons"
@@ -88,7 +109,8 @@
                 android:layout_centerVertical="true"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_more_vert_black_24dp"/>
+                app:srcCompat="@drawable/ic_more_vert_black_24dp"/>
         </RelativeLayout>
     </LinearLayout>
-</RelativeLayout>
+    -->
+</android.support.design.widget.CoordinatorLayout>

@@ -53,4 +53,6 @@
     <string name="dummy_fragment">Dummy Fragment</string>
     <string name="loading_hackathons">LOADING HACKATHONS</string>
     <string name="location_permission_expl">We\'d like permission to get your location to show nearby hackathons.</string>
+    <string name="hackathon_unfavorited">Hackathon unfavorited.</string>
+    <string name="hackathon_favorited">Hackathon favorited.</string>
 </resources>

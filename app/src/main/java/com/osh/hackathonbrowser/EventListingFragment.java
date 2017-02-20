@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,23 +15,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.osh.hackathonbrowser.api.ApiFactory;
 import com.osh.hackathonbrowser.api.response.HackathonResponse;
-import com.osh.hackathonbrowser.model.HackathonEvent;
-import com.squareup.okhttp.internal.Util;
+import com.osh.hackathonbrowser.cache.HackCache;
 import com.squareup.picasso.Picasso;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -119,7 +114,9 @@ public class EventListingFragment extends BaseFragment {
             holder.mainContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(v.getContext(), HackathonActivity.class));
+                    Intent hackathonActivity = new Intent(v.getContext(), HackathonActivity.class);
+                    hackathonActivity.putExtra(HackathonActivity.EXTRA_HACKATHON_RESPONSE_STR, new Gson().toJson(event));
+                    startActivity(hackathonActivity);
                 }
             });
         }
@@ -227,6 +224,8 @@ public class EventListingFragment extends BaseFragment {
                     });
         } else if (mode == LISTING_MODE_FAVORITE_HACKS){
             adapter.setEndOfResultsStringResource(R.string.end_of_results);
+            List<HackathonResponse> responses = HackCache.getInstance().getFavoriteHackathons();
+            events.addAll(responses);
             adapter.notifyDataSetChanged();
         }
     }
